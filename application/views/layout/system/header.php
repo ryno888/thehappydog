@@ -7,6 +7,7 @@ $base_url = CI_BASE_URL;
 	<?php echo isset($meta) ? Lib_html_tags::load_meta_data($meta) : false; ?>
     <link rel="stylesheet" type="text/css" href="<?php echo $base_url; ?>assets/bootstrap/css/bootstrap.min.css">
     <link rel="stylesheet" type="text/css" href="<?php echo $base_url; ?>assets/bootstrap/fonts/font-awesome.min.css">
+    <link rel="stylesheet" type="text/css" href="<?php echo $base_url; ?>assets/css/dropzone.css">
     <link rel="stylesheet" type="text/css" href="<?php echo $base_url; ?>assets/css/nanoscroller.css">
     <link rel="stylesheet" type="text/css" href="<?php echo $base_url; ?>assets/css/system.css">
     <link rel="stylesheet" type="text/css" href="<?php echo $base_url; ?>assets/css/style.css">
@@ -19,5 +20,11 @@ $base_url = CI_BASE_URL;
 </head>
 
 <body>
+    <div class="overlay" style="width: 100%;">
+        <div class="overlay-content">
+            <div class="loader"></div>
+            <div class='loader-message'></div>
+        </div>
+    </div>
     <?php include_once 'navbar.php'; ?>
     <div class="margin-bottom-50">

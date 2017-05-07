@@ -1,37 +1,6 @@
 <?php
 defined('BASEPATH') OR exit('No direct script access allowed');
 ?>
-    <!-- Navigation -->
-    <nav class="navbar navbar-custom navbar-fixed-top" role="navigation">
-        <div class="container">
-            <div class="navbar-header">
-                <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-main-collapse">
-                    Menu <i class="fa fa-bars"></i>
-                </button>
-                <a class="navbar-brand page-scroll colorGreen" href="#page-top">
-                    <i class="fa fa-paw"></i>
-                    <span class="light">Home</span>
-                </a>
-                <div class="clearfix"></div>
-            </div>
-
-            <!-- Collect the nav links, forms, and other content for toggling -->
-            <div class="collapse navbar-collapse navbar-right navbar-main-collapse">
-                <ul class="nav navbar-nav">
-                    <!-- Hidden li included to remove active class from about link when scrolled up past about section -->
-                    
-                    <li class="hidden"><a href="#page-top"></a> </li>
-                    <li><a class="page-scroll" href="#about">About Us</a></li>
-                    <li><a class="page-scroll" href="#services">Services</a></li>
-                    <li><a class="page-scroll" href="#gallery">Gallery</a></li>
-                    <li><a class="page-scroll" href="#contact">Contact</a></li>
-                </ul>
-            </div>
-            <!-- /.navbar-collapse -->
-        </div>
-        <!-- /.container -->
-    </nav>
-
     <!-- Intro Header -->
     <header class="intro">
         <div class="background-image">
@@ -74,7 +43,7 @@ defined('BASEPATH') OR exit('No direct script access allowed');
                                 <h2>Accommodation</h2>
                                 <i class="fa fa-heart font100"></i>
                                 <div class="overlay">
-                                    <a class="info" href="<?php echo "index.php/accommodation" ?>">View</a>
+                                    <a class="info" href="<?php echo Http_helper::build_url("service/vservice_accommodation") ?>">View</a>
                                 </div>
                             </div>
                         </div>
@@ -83,8 +52,7 @@ defined('BASEPATH') OR exit('No direct script access allowed');
                                 <h2>Shelters and Rescues</h2>
                                 <i class="fa fa-home font100"></i>
                                 <div class="overlay">
-                                    
-                                    <a class="info" href="#">link here</a>
+                                    <a class="info" href="<?php echo Http_helper::build_url("service/vservice_shelter") ?>">link here</a>
                                 </div>
                             </div>
                         </div>
@@ -93,8 +61,7 @@ defined('BASEPATH') OR exit('No direct script access allowed');
                                 <h2>Restaurants</h2>
                                 <i class="fa fa-cutlery font100"></i>
                                 <div class="overlay">
-                                    
-                                    <a class="info" href="#">link here</a>
+                                    <a class="info" href="<?php echo Http_helper::build_url("service/vservice_restaurant") ?>">link here</a>
                                 </div>
                             </div>
                         </div>
@@ -103,8 +70,7 @@ defined('BASEPATH') OR exit('No direct script access allowed');
                                 <h2>Pet Travel</h2>
                                 <i class="fa fa-car font100"></i>
                                 <div class="overlay">
-                                    
-                                    <a class="info" href="#">link here</a>
+                                    <a class="info" href="<?php echo Http_helper::build_url("service/vservice_travel") ?>">link here</a>
                                 </div>
                             </div>
                         </div>
@@ -113,8 +79,7 @@ defined('BASEPATH') OR exit('No direct script access allowed');
                                 <h2>Puppy Day Care</h2>
                                 <i class="fa fa-heartbeat font100"></i>
                                 <div class="overlay">
-                                    
-                                    <a class="info" href="#">link here</a>
+                                    <a class="info" href="<?php echo Http_helper::build_url("service/vservice_daycare") ?>">link here</a>
                                 </div>
                             </div>
                         </div>
@@ -123,8 +88,7 @@ defined('BASEPATH') OR exit('No direct script access allowed');
                                 <h2>Pet and Home Sitters</h2>
                                 <i class="fa fa-user font100"></i>
                                 <div class="overlay">
-                                    
-                                    <a class="info" href="#">link here</a>
+                                    <a class="info" href="<?php echo Http_helper::build_url("service/vservice_sitters") ?>">link here</a>
                                 </div>
                             </div>
                         </div>
@@ -133,18 +97,16 @@ defined('BASEPATH') OR exit('No direct script access allowed');
                                 <h2>Vets</h2>
                                 <i class="fa fa-medkit font100"></i>
                                 <div class="overlay">
-                                    
-                                    <a class="info" href="#">link here</a>
+                                    <a class="info" href="<?php echo Http_helper::build_url("service/vservice_vets") ?>">link here</a>
                                 </div>
                             </div>
                         </div>
                         <div class="col-xs-6 col-sm-4">
                             <div class="hovereffect">
                                 <h2>Pet Shops</h2>
-                                <i class="fa fa-shopping-basket font100"></i>
+                                <i class="fa fa-shopping-cart font100"></i>
                                 <div class="overlay">
-                                    
-                                    <a class="info" href="#">link here</a>
+                                    <a class="info" href="<?php echo Http_helper::build_url("service/vservice_shops") ?>">link here</a>
                                 </div>
                             </div>
                         </div>
@@ -154,7 +116,7 @@ defined('BASEPATH') OR exit('No direct script access allowed');
                                 <i class="fa fa-futbol-o font100"></i>
                                 <div class="overlay">
                                     
-                                    <a class="info" href="#">link here</a>
+                                    <a class="info" href="<?php echo Http_helper::build_url("service/vservice_trainers") ?>">link here</a>
                                 </div>
                             </div>
                         </div>
@@ -244,6 +206,6 @@ defined('BASEPATH') OR exit('No direct script access allowed');
     </section>
 
     <!-- Map Section -->
-    <div id="map"></div>
+    <!--<div id="map"></div>-->
     
     

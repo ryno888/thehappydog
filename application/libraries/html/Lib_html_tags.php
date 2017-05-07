@@ -490,8 +490,88 @@ class Lib_html_tags extends Lib_core{
         
         return self::wrap_form_group(false, $id, "
             <label class='btn btn-primary btn-sm btn-file'>
-                $label{$html_options['span']} ".form_upload($data_arr, '', $data_arr['js'])."
+                $label ".form_upload($data_arr, '', $data_arr['js'])."
             </label>");
+    }
+    //--------------------------------------------------------------------------
+    public static function ifile_dropzone($label, $id, $dest, $options = []) {
+        $options_arr = array_merge([
+            'show_loader' => true,
+            'loader_message' => 'Compressing image. Please wait...',
+            'url_upload' => Http_helper::build_url("cms/xupload_file"),
+            'url_delete' => false,
+            'data' => false,
+        ], $options);
+        
+        $dest_encoded = urlencode($dest);
+        $show_loader = $options_arr['show_loader'] ? "showLoader('{$options_arr['loader_message']}');" : "";
+        $remove_image = $options_arr['url_delete'] ? "
+            addRemoveLinks: true,
+            removedfile: function(file) {
+                system.ajax.requestFunction('{$options_arr['url_delete']}', function(){
+                    var _ref;
+                    return (_ref = file.previewElement) != null ? _ref.parentNode.removeChild(file.previewElement) : void 0;
+                }, {data:{file:file.name,dest:'$dest_encoded'}});
+
+            },
+        " : "";
+        
+        $added_files_arr = glob("$dest/*");
+        $added_files_js = [];
+        
+        
+        foreach ($added_files_arr as $file) {
+            $added_files_js[] = [
+                "name" => basename($file),
+                "size" => filesize($file),
+                "status" => "Dropzone.ADDED",
+                "accepted" => "true"
+            ];
+        }
+                
+        return self::wrap_form_group(false, $id, "
+            <div class='panel panel-info'>
+                <div class='panel-heading'>$label</div>
+                <div class='panel-body'>
+                    <div class='dropzone' id='$id'></div>
+                </div>
+            </div>
+            <script>
+                $(document).ready(function(){
+                    Dropzone.autoDiscover = false;
+                    $('div#$id').dropzone({
+                        url: '{$options_arr["url_upload"]}',
+                        margin: 20,
+                        params:{'action': 'save'},
+                        sending: function(file, xhr, formData){
+                            formData.append('dest', '$dest_encoded');
+                            $('.dz-progress').hide();
+                            $('.dz-remove').hide();
+                            $show_loader
+                        },
+                        init: function() {
+                            thisDropzone = this;
+                            var data = ".json_encode($added_files_js).";
+                            $.each(data, function(key,value){
+                                var mockFile = { name: value.name, size: value.size };
+                                thisDropzone.options.addedfile.call(thisDropzone, mockFile);
+                                thisDropzone.createThumbnailFromUrl(mockFile, ci_base_url+'$dest/'+value.name, function() {
+                                    thisDropzone.emit('complete', mockFile);
+                                });
+                                $('.dz-progress').hide();
+                            });
+                        },
+                        success: function(res, index){
+                            $('.dz-remove').show();
+                            hideLoader();
+                        },
+                        $remove_image
+                    });
+                    
+
+                });
+            </script>
+        ");
     }
     //--------------------------------------------------------------------------
     public static function form_open($action, $id = false, $options = []) {

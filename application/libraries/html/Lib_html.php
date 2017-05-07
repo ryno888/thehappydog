@@ -154,6 +154,23 @@ class Lib_html extends Lib_core{
         $this->add_html("html", Lib_html_tags::idatetime($id, $label, $value, $options_arr));
     }
     //--------------------------------------------------------------------------
+    public function ifile($label, $id, $value = false, $options = []) {
+        $error = form_error($id);
+        if($error){
+            $label .= "<div class='form-error-label'>$error</div>";
+        }
+        $this->add_html("html", Lib_html_tags::ifile($label, $id, $value, $options));
+    }
+    //--------------------------------------------------------------------------
+    public function ifile_dropzone($label, $id, $dest, $options = []) {
+        $error = form_error($id);
+        if($error){
+            $label .= "<div class='form-error-label'>$error</div>";
+        }
+        $this->ihidden("file_dest", urlencode($dest));
+        $this->add_html("html", Lib_html_tags::ifile_dropzone($label, $id, $dest, $options));
+    }
+    //--------------------------------------------------------------------------
     public function dbinput($obj, $field, $options = []) {
         
         $options_arr = array_merge([

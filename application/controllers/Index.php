@@ -10,9 +10,13 @@ class Index extends CI_Controller {
     public function xhome() {
         $active_id = Lib_user::get_active_id();
         if(!$active_id){
-            Http_helper::redirect("index.php/home/home");
+            Http_helper::redirect("index.php/home/vhome");
         }
-        Http_helper::redirect("index.php/person/vlist");
+        Http_helper::redirect("index.php/index/vhome");
+    }
+    //--------------------------------------------------------------------------
+    public function vhome() {
+        $this->load_view('index/vhome', "system");
     }
     //--------------------------------------------------------------------------
     public function vlogin() {
