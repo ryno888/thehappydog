@@ -14,3 +14,8 @@ defined('BASEPATH') OR exit('No direct script access allowed');
     <script type="text/javascript" src="<?php echo $base_url; ?>assets/js/frontend.js"></script>
     <script type="text/javascript" src="<?php echo $base_url; ?>assets/js/components.js"></script>
 </html>
+<script>
+$(document).ready(function () {
+    hideLoader();
+});
+</script>

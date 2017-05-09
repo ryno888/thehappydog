@@ -12,7 +12,7 @@ class Index extends CI_Controller {
         if(!$active_id){
             Http_helper::redirect("index.php/home/vhome");
         }
-        Http_helper::redirect("index.php/index/vhome");
+        Http_helper::redirect("index.php/cms/vlist_service");
     }
     //--------------------------------------------------------------------------
     public function vhome() {
@@ -55,6 +55,12 @@ class Index extends CI_Controller {
         $session = Lib_session::get_session();
         $session->sess_destroy();
         Http_helper::go_home();
+    }
+    //--------------------------------------------------------------------------
+    public function xstream() {
+        $fil_id = request("fil_id");
+        $file = Lib_db::load_db("file", "fil_id = $fil_id");
+        $file->stream();
     }
     //--------------------------------------------------------------------------
 }

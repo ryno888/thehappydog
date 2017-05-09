@@ -285,11 +285,19 @@ class Lib_html extends Lib_core{
         
         $icon = $options_arr["icon"] ? '<i class="fa '.$options_arr["icon"].'" aria-hidden="true"></i> ' : '';
         if($onclick === false){
-            $onclick = "system.ajax.submitForm('$this->form_id', {success: function(data){
-                $this->form_success_js
-            }, error: function(){
-                $this->form_error_js
-            }});";
+            $onclick = "
+                showLoader();
+                system.ajax.submitForm('$this->form_id', {success: function(data){
+                    setTimeout(function(){
+                        $this->form_success_js
+                    }, 400);
+                }, error: function(){
+                    setTimeout(function(){
+                        $this->form_error_js
+                    }, 400);
+                }});
+                hideLoader(0);
+            ";
         }
         
         $this->menu_html[] = '<button onclick="'.$onclick.'" class="btn btn-success margin-right-5" type="button">'.$icon.$label.'</button>';

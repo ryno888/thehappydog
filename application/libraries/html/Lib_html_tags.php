@@ -54,6 +54,10 @@ class Lib_html_tags extends Lib_core{
         return "<div class='$container'>$titel</div>";
     }
     //--------------------------------------------------------------------------
+    public static function image($src) {
+        return img($src);
+    }
+    //--------------------------------------------------------------------------
     public static function button($label = '', $onclick = "javascript:;", $options = []) {
         $options_arr = array_merge([
 			'name'  => false,
@@ -521,12 +525,14 @@ class Lib_html_tags extends Lib_core{
         
         
         foreach ($added_files_arr as $file) {
-            $added_files_js[] = [
-                "name" => basename($file),
-                "size" => filesize($file),
-                "status" => "Dropzone.ADDED",
-                "accepted" => "true"
-            ];
+            if(!is_dir($file)){
+                $added_files_js[] = [
+                    "name" => basename($file),
+                    "size" => filesize($file),
+                    "status" => "Dropzone.ADDED",
+                    "accepted" => "true"
+                ];
+            }
         }
                 
         return self::wrap_form_group(false, $id, "

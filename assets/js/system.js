@@ -151,5 +151,13 @@ var system = {
         $temp.val($(element).text()).select();
         document.execCommand("copy");
         $temp.remove();
+    },
+    showLoader: function(message){
+        $(".__loader-message").text(message);
+        system.fadeIn('.__overlay', 500);
+    },
+    hideLoader: function(){
+        $(".__loader-message").text("");
+        system.fadeOut('.__overlay', 500);
     }
 }

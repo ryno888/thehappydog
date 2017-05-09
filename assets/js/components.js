@@ -5,13 +5,13 @@ $(document).ready(function () {
 });
 
 //--------------------------------------------------------------------------
-function showLoader(message){
-    $(".loader-message").text(message);
-    system.fadeIn('.overlay', 500);
+function showLoader(message, time){
+    $(".__loader-message").text(message);
+    system.fadeIn('.__overlay', time ? time : 500);
 }
 //--------------------------------------------------------------------------
-function hideLoader(){
-    $(".loader-message").text("");
-    system.fadeOut('.overlay', 500);
+function hideLoader(time){
+    $(".__loader-message").text("");
+    system.fadeOut('.__overlay', time ? time : 500);
 }
 //------------------------------------------------------------------------------

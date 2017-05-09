@@ -10,7 +10,7 @@
     $html->form("cms/xedit_service");
         $html->add_menu_button("Cancel", "system.browser.redirect('cms/vlist_service')");
         $html->add_menu_submitbutton("Save Changes");
-            $html->ihidden("per_id", $service->id);
+            $html->ihidden("ser_id", $service->id);
             $html->add_column("third");
                 $html->fieldset_open("General Details");
                     $html->dbinput($service, "ser_title", ["required" => true]);
@@ -40,6 +40,10 @@
             $html->end_column();
     $html->end_form();
     $html->display();
+    
+//    echo '<img src="http://localhost/thehappydog/index.php/index/xstream/fil_id/48" alt="">';
+//    echo '<img src="http://localhost/thehappydog/index.php/index/xstream/fil_id/49" alt="">';
+//    echo '<img src="http://localhost/thehappydog/index.php/index/xstream/fil_id/50" alt="">';
     
     ?>
                 

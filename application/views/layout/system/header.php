@@ -20,10 +20,10 @@ $base_url = CI_BASE_URL;
 </head>
 
 <body>
-    <div class="overlay" style="width: 100%;">
-        <div class="overlay-content">
-            <div class="loader"></div>
-            <div class='loader-message'></div>
+    <div class="__overlay" style="width: 100%;">
+        <div class="__overlay-content">
+            <div class="__loader"></div>
+            <div class='__loader-message'></div>
         </div>
     </div>
     <?php include_once 'navbar.php'; ?>

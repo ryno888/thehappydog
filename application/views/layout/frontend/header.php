@@ -18,6 +18,12 @@ $base_url = CI_BASE_URL;
 </head>
 
 <body>
+    <div class="__overlay" style="width: 100%;">
+        <div class="__overlay-content">
+            <div class="__loader"></div>
+            <div class='__loader-message'></div>
+        </div>
+    </div>
     <div class="margin-bottom-50">
         
         <!-- Navigation -->
