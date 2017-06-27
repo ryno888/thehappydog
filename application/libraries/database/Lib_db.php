@@ -8,6 +8,7 @@ class Lib_db{
     //put your code here
     private $table = false;
     private $key = false;
+    private $display_field = false;
     private $fields_arr = false;
     
     public $id = false;
@@ -51,14 +52,32 @@ class Lib_db{
         return $this->fields_arr[$field_name]["default"];
     }
     //--------------------------------------------------------------------------
+    public function get_display() {
+        return $this->display_field;
+    }
+    //--------------------------------------------------------------------------
     public function get_field_reference_data($field_name) {
         
         $table = isset($this->fields_arr[$field_name]["reference"]) ? $this->fields_arr[$field_name]["reference"] : false;
-        $key = false;
         if($table){
-            $key = $this->get_table_key($table);
+            $class = Lib_db::load_db_default($table);
+            return [
+                "table" => $table, 
+                "key" => $class->key,
+                "display_field" => $class->display_field,
+            ];
         }
-        return ["table" => $table, "key" => $key];
+        
+    }
+    //--------------------------------------------------------------------------
+    public function get_list($field_name) {
+        
+        $reference_table = $this->get_field_reference_data($field_name);
+        return Lib_database::selectlist("
+            SELECT {$reference_table["key"]}, {$reference_table["display_field"]} 
+            FROM  {$reference_table["table"]}", 
+            $reference_table["key"], $reference_table["display_field"]
+        );
     }
     //--------------------------------------------------------------------------
     public function get_field_display($field_name) {
@@ -120,16 +139,16 @@ class Lib_db{
             $obj = Lib_database::query("SELECT $id_select $this->table.* FROM $customsql", $options_arr["multiple"] ? false : 1);
         }
         
-        if(!$options_arr["multiple"] && $obj){
+        if($options_arr["multiple"] && $obj){
+            $this->obj_arr = $obj;
+            return $this->obj_arr;
+        }else if($obj){
             $this->obj = $obj;
             $this->id = $this->obj->{$this->key};
+            return $this->obj;
         }else{
-            $this->obj_arr = $obj;
+            return false;
         }
-        
-        
-        
-        return $this->obj;
     }
     //--------------------------------------------------------------------------
     private function set_new() {
@@ -160,8 +179,9 @@ class Lib_db{
     //--------------------------------------------------------------------------
     public function delete() {
         $database = new Lib_database();
-        $this->on_delete($this->obj);
+        $this->on_delete();
         $database->delete($this->table, $this->key, $this->get($this->key));
+        $this->on_delete_complete();
     }
     //--------------------------------------------------------------------------
     public function clean_obj() {
@@ -193,9 +213,9 @@ class Lib_db{
         $ci->load->library("db/$class");
         
         $db = new $class;
-        $db->get_fromdb($sql, $options);
+        $obj = $db->get_fromdb($sql, $options);
         
-        return $db;
+        return $obj ? $db : false;
     }
     //--------------------------------------------------------------------------
     public static function load_db_default($table){
@@ -216,16 +236,24 @@ class Lib_db{
         return $class->get_key();
     }
     //--------------------------------------------------------------------------
-    public static function get_enum_arr($table, $field){
+    public static function get_enum_arr($table, $field, $exclude = []){
         $class = Lib_db::load_db_default($table);
-        
-        return $class->{$field};
+        $return = $class->{$field};
+        foreach ($exclude as $value) {
+            if(isset($return[$value])){
+                unset($return[$value]);
+            }
+        }
+        return $return;
     }
     //--------------------------------------------------------------------------
     public static function get_enum_value($table, $field, $value = false){
         $class = Lib_db::load_db_default($table);
-        
         return isset($class->{$field}[$value]) ? $class->{$field}[$value] : false;
+    }
+    //--------------------------------------------------------------------------
+    function set_display($display_field) {
+        $this->display_field = $display_field;
     }
     //--------------------------------------------------------------------------
 }

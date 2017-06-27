@@ -8,6 +8,7 @@ class Dbx_person_role extends Lib_db{
     
     public function __construct() {
         $this->set_key("pel_id");
+        $this->set_display("pel_ref_person");
         $this->set_table("person_role");
         
         $this->set_fields_arr([

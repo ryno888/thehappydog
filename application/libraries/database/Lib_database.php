@@ -99,7 +99,6 @@ class Lib_database extends Lib_core{
         $ci =& get_instance();
         $ci->load->database();
         $resultSet = $ci->db->query($limit ? "$sql LIMIT $limit " : $sql);
-        
         $result = $resultSet && is_object($resultSet) ? $resultSet->result() : false;
         if($result && $limit == 1 && array_key_exists(0, $result)){
             return $result[0];

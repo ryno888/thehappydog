@@ -43,7 +43,7 @@ defined('BASEPATH') OR exit('No direct script access allowed');
                                 <h2>Accommodation</h2>
                                 <i class="fa fa-heart font100"></i>
                                 <div class="overlay">
-                                    <a class="info" href="<?php echo Http_helper::build_url("service/vservice_accommodation") ?>">View</a>
+                                    <a class="info" href="<?php echo Http_helper::build_url("service/vservice/1") ?>">View</a>
                                 </div>
                             </div>
                         </div>
@@ -52,7 +52,7 @@ defined('BASEPATH') OR exit('No direct script access allowed');
                                 <h2>Shelters and Rescues</h2>
                                 <i class="fa fa-home font100"></i>
                                 <div class="overlay">
-                                    <a class="info" href="<?php echo Http_helper::build_url("service/vservice_shelter") ?>">link here</a>
+                                    <a class="info" href="<?php echo Http_helper::build_url("service/vservice/2") ?>">link here</a>
                                 </div>
                             </div>
                         </div>
@@ -61,7 +61,7 @@ defined('BASEPATH') OR exit('No direct script access allowed');
                                 <h2>Restaurants</h2>
                                 <i class="fa fa-cutlery font100"></i>
                                 <div class="overlay">
-                                    <a class="info" href="<?php echo Http_helper::build_url("service/vservice_restaurant") ?>">link here</a>
+                                    <a class="info" href="<?php echo Http_helper::build_url("service/vservice/3") ?>">link here</a>
                                 </div>
                             </div>
                         </div>

@@ -18,6 +18,8 @@ require_once(DIR_APPLICATION.'libraries/html/Lib_html_tab.php');
 require_once(DIR_APPLICATION.'libraries/html/Lib_navbar.php');
 require_once(DIR_APPLICATION.'libraries/html/Lib_html_calendar.php');
 
+//custom
+
 class Lib_core {
     public $ci = false;
     //--------------------------------------------------------------------------

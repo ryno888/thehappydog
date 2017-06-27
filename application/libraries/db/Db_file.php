@@ -8,6 +8,7 @@ class Db_file extends Lib_db{
     
     public function __construct() {
         $this->set_key("fil_id");
+        $this->set_display("fil_name");
         $this->set_table("file");
         
         $this->set_fields_arr([

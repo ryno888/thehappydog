@@ -285,7 +285,8 @@ class Lib_list extends Lib_core{
     }
     //--------------------------------------------------------------------------
     public function nav_append($html){
-        $this->menu_arr[] = $html;
+        $this->menu_arr[] = '<div class="input-group-btn padding-right-5">'.$html.'</div>';
+//        $this->menu_arr[] = $html;
     }
     //--------------------------------------------------------------------------
     public function add_new_btn($label = "Add", $onclick = "javascript:;"){

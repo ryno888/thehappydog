@@ -39,19 +39,22 @@ class Lib_navbar extends Lib_core{
         $options_arr = array_merge([
             "align" => "left",
             "icon" => false,
+            "newtab" => false,
         ], $options);
         
         $attributes = $this->format_options($options);
         $formatted_href = $this->format_href($href);
         $icon = $options_arr["icon"] ? "<i class='fa {$options_arr["icon"]}' aria-hidden='true'></i> " : "";
+        $newtab = $options_arr["newtab"] ? "target='_blank'" : "";
         
-        $this->add_li("<li><a class='{$attributes['css']}' $formatted_href>{$icon}{$label}</a></li>", $options_arr['align']);
+        $this->add_li("<li><a $newtab class='{$attributes['css']}' $formatted_href>{$icon}{$label}</a></li>", $options_arr['align']);
     }
     //--------------------------------------------------------------------------
     public function add_navitem_dropdown($label, $item_arr = [], $options = []) {
         $options_arr = array_merge([
             "align" => "left",
             "show_caret" => true,
+            "icon" => true,
         ], $options);
         
         $li_item_html = "";
@@ -59,10 +62,10 @@ class Lib_navbar extends Lib_core{
             $formatted_href = $this->format_href($href);
             $li_item_html .= "<li><a $formatted_href>$inner_label</a></li>";
         }
-        
+         $icon = $options_arr["icon"] ? "<i class='fa {$options_arr["icon"]}' aria-hidden='true'></i> " : "";
         $caret = $options_arr["show_caret"] ? "<span class='caret'></span>" : "";
         $li = "
-            <li class='dropdown'><a class='dropdown-toggle' data-toggle='dropdown' aria-expanded='false' href='#'>{$label}{$caret}</a>
+            <li class='dropdown'><a class='dropdown-toggle' data-toggle='dropdown' aria-expanded='false' href='#'>{$icon}{$label}{$caret}</a>
                 <ul class='dropdown-menu' role='menu'>
                     $li_item_html
                 </ul>

@@ -11,6 +11,7 @@ class Db_person extends Dbx_person{
         parent::__construct();
         
         $this->set_key("per_id");
+        $this->set_display("per_name");
         $this->set_table("person");
         
         $this->set_fields_arr([

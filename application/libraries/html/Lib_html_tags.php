@@ -200,6 +200,60 @@ class Lib_html_tags extends Lib_core{
         return self::wrap_form_group($__label, $id, implode("", $radio_array), $options_arr);
     }
     //--------------------------------------------------------------------------
+    public static function icheckbox_multi($label, $id, $item_arr = [], $checked = false, $options = []) {
+        $options_arr = array_merge([
+            'inline'       => false,
+            'hidden'       => false,
+            'required'       => false,
+            'onclick'       => false,
+            'parent_id'       => "__$id",
+            'exclude'       => [],
+            'attr_arr'       => [],
+        ], $options);
+
+        if(isset($options_arr["label"]) && $options_arr["label"]){ $label = $options_arr["label"]; }
+        
+        $data_arr = array_merge([
+                'name'          => $id,
+                'id'            => "{$id}[]",
+                'value'         => false,
+                'checked'       => false,
+                'style'         => '',
+                'class'         => '',
+        ], $options_arr['attr_arr']);
+        
+        $radio_array = [];
+        if($options_arr["exclude"]){
+            foreach ($options_arr["exclude"] as $value) {
+                if(isset($item_arr[$value])){
+                    unset($item_arr[$value]);
+                }
+            }
+        }
+        
+        foreach ($item_arr as $key => $value) {
+            
+            $data_arr["value"] = $key;
+            if(is_array($checked)){
+                $data_arr["checked"] = in_array($key, $checked)  ? true : false;
+            }
+            $inline = $options_arr["inline"] == true ? "class='radio-inline'" : false;
+            
+            $html_options = Lib_html_tags::get_html_options($options);
+            $data_arr['class'] = "{$data_arr['class']} {$html_options['css']}";
+            $data_arr['style'] = "{$data_arr['style']} {$html_options['style']}";
+            if($inline){
+                $radio_array[] = "<span class='margin-right-10'><label $inline>".form_checkbox($data_arr)." $value</label></span>";
+            }else{
+                $radio_array[] = "<div class='radio checkbox-inline-group'><label $inline>".form_checkbox($data_arr)."$value</label></div>";
+            }
+        }
+        
+        $__label = $options_arr["inline"] ? "<div class='col-md-12'><label>{$label}{$html_options['span']}</label></div>" : $label.$html_options['span'];
+        
+        return self::wrap_form_group($__label, $id, implode("", $radio_array), $options_arr);
+    }
+    //--------------------------------------------------------------------------
     public static function itext($label, $id, $value = false, $options = []) {
         $options_arr = array_merge([
             'append'       => false,
@@ -331,7 +385,7 @@ class Lib_html_tags extends Lib_core{
         
         $data_arr = array_merge([
             'name'          => $id,
-            'id'       => 'shirts',
+            'id'       => $id,
             'onChange' => $options_arr["!change"],
             'class' => 'form-control input-sm',
             'style'         => false,
@@ -443,19 +497,19 @@ class Lib_html_tags extends Lib_core{
         
 //        format: 'LT'
         return "
-                    <div class='form-group'>
-                        <div class='input-group date' id='$id'>
-                            $input
-                        </div>
-                    </div>
-                    <script type='text/javascript'>
-                        $(function () {
-                            $('#$id').datetimepicker({
-                                format: {$options_arr['format']},
-                                defaultDate: '$value'
-                            });
-                        });
-                    </script>
+            <div class='form-group'>
+                <div class='input-group date' id='$id'>
+                    $input
+                </div>
+            </div>
+            <script type='text/javascript'>
+                $(function () {
+                    $('#$id').datetimepicker({
+                        format: {$options_arr['format']},
+                        defaultDate: '$value'
+                    });
+                });
+            </script>
         ";
     }
     //--------------------------------------------------------------------------
@@ -473,6 +527,17 @@ class Lib_html_tags extends Lib_core{
     //--------------------------------------------------------------------------
     public static function fieldset_close() {
         return form_fieldset_close();
+    }
+    //--------------------------------------------------------------------------
+    public static function iconbutton($label, $onclick = "javascript:;", $icon = false, $options = []) {
+        $options_arr = array_merge([
+        ], $options);
+        
+        $html_options = Lib_html_tags::get_html_options($options);
+        $class = "{$html_options['css']}";
+        $style = "{$html_options['style']}";
+        $onclick = str_replace("'", '"', $onclick);
+        return "<i onclick='$onclick' class='fa $icon fa-icon-btn $class' title='$label' style='$style' aria-hidden='true'></i>";
     }
     //--------------------------------------------------------------------------
     public static function ifile($label, $id, $value = false, $options = []) {

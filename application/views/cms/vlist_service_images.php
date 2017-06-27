@@ -14,12 +14,21 @@
     $list->sql_where = "sef_ref_service = $service->id";
     
     $list->add_field("Name", "fil_name");
-    $list->add_field("Preview", "sef_ref_file_thumb_sm", ["function" => function($sef_ref_file_thumb_lg){
-        return Lib_html_tags::image(Http_helper::build_url("index/xstream/fil_id/$sef_ref_file_thumb_lg"));
+    $list->add_field("Preview", "sef_id", ["function" => function($sef_id){
+        $service_file = Lib_db::load_db("service_file", "sef_id = $sef_id");
+        $sef_ref_file_thumb_tiny = Http_helper::build_url("index/xstream/fil_id/{$service_file->get("sef_ref_file_thumb_tiny")}");
+        $sef_ref_file_thumb_lg = Http_helper::build_url("index/xstream/fil_id/{$service_file->get("sef_ref_file_thumb_lg")}");
+        return "
+            <a href='$sef_ref_file_thumb_lg' class='fancy-box-image' data-fancybox='images' data-width='900' data-height='500'>
+                <img class='fancy-box-thumb' src='$sef_ref_file_thumb_tiny' />
+            </a>
+        ";
+//        return Lib_html_tags::image(Http_helper::build_url("index/xstream/fil_id/$sef_ref_file_thumb_lg"));
     }]);
-    $list->add_field("Date added", "fil_date_created", ["function" => function($fil_date_created){ return Lib_date::strtodate($fil_date_created, Lib_date::$DATE_FORMAT_11); }]);
+//    $list->add_field("Date added", "fil_date_created", ["function" => function($fil_date_created){ return Lib_date::strtodate($fil_date_created, Lib_date::$DATE_FORMAT_11); }]);
     
     $list->add_action_assoc("cms/vedit_service", ["ser_id" => "%ser_id%"]);
-    $list->add_action_delete("system.ajax.requestFunction('person/xdelete/id/%ser_id%', function(){}, {confirm:true})");
+    $list->add_action_delete("cms/xdelete_service_file/sef_id/%sef_id%");
+//    $list->add_action_delete("system.ajax.requestFunction('person/xdelete/id/%ser_id%', function(){}, {confirm:true})");
     $list->display();
 ?>

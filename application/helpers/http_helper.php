@@ -61,7 +61,7 @@ class Http_helper {
         $options_arr = array_merge([
             "code" => 2,
             "action" => [
-                "type" => "reload",
+                "type" => "reload", //refresh / redirect / reload
                 "url" => "",
             ],
         ], $options);

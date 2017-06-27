@@ -43,7 +43,7 @@ error-wrapper.div.container{ margin-top:20px; }
 
 
 /*table*/
-.table>tbody>tr>td { border-top: 1px solid #cecece !important; }
+.table>tbody>tr>td { border-top: 1px solid #cecece !important; vertical-align: middle; }
 .list-action{ font-size: 14px; width: 10px; padding: 8px 8px 8px 0px !important; cursor: pointer; };
 .list-action:hover{color: #1d9ce5}
 
@@ -57,6 +57,7 @@ error-wrapper.div.container{ margin-top:20px; }
 .input-width-full { width: 100% }
 .input-width-half { width: 50% }
 .input-width-third { width: 30% }
+.fa-icon-btn {cursor: pointer; padding: 5px; font-size: 14px}
 
 /*tab*/
 .wrapper {

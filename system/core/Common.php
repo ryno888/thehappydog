@@ -1031,6 +1031,20 @@ if ( ! function_exists('function_usable'))
     }
     // ------------------------------------------------------------------------
 
+    if (!function_exists('request_key')) {
+
+        function request_key($default = false) {
+            $ci = &get_instance();
+            $uri_arr = $ci->uri->rsegment_array();
+            if(array_key_exists(3, $uri_arr)){
+                return $uri_arr[3];
+            }
+            return $default;
+        }
+
+    }
+    // ------------------------------------------------------------------------
+
     if (!function_exists('request_db')) {
 
         function request_db($table, $key = false, $options = []) {
@@ -1039,7 +1053,10 @@ if ( ! function_exists('function_usable'))
                 "suffix" => "",
             ], $options);
             $obj = Lib_db::load_db_default($table);
-            $id = request($key ? "{$options_arr["prefix"]}{$key}{$options_arr["suffix"]}" : "{$options_arr["prefix"]}{$obj->get_key()}{$options_arr["suffix"]}");
+            $id = request_key();
+            if(!$id){
+                $id = request($key ? "{$options_arr["prefix"]}{$key}{$options_arr["suffix"]}" : "{$options_arr["prefix"]}{$obj->get_key()}{$options_arr["suffix"]}");
+            }
             $obj->get_fromdb($id);
             
             return $obj;

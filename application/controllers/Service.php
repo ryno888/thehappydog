@@ -3,6 +3,12 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 
 class Service extends CI_Controller {
     //--------------------------------------------------------------------------
+    public function vservice() {
+        $key = request_key();
+        $data["title"] = Lib_db::get_enum_value("service", "ser_type", $key);
+        $this->load_view('service/vservice', "frontend", $data);
+    }
+    //--------------------------------------------------------------------------
     public function vservice_details() {
         $this->load_view('service/vservice_details', "frontend");
     }

@@ -33,6 +33,7 @@ var system = {
             var options_obj = $.extend({
                 data: false,
                 success: function () {},
+                complete: function () {},
                 error: function () {},
                 form: false,
                 confirm: false,
@@ -47,6 +48,7 @@ var system = {
                         data: options_obj.data,
                         form: options_obj.form,
                         success: (func == undefined ? function () {} : func),
+                        complete: options_obj.complete,
                         error: options_obj.error
                     });
                     location.reload();
@@ -58,9 +60,17 @@ var system = {
                     data: options_obj.data,
                     form: options_obj.form,
                     success: (func == undefined ? function () {} : func),
+                    complete: options_obj.complete,
                     error: options_obj.error
                 });
             }
+        },
+        requestRefresh: function(url, options) {
+            var options_obj = $.extend({
+                complete: function () { document.location.reload(); },
+            }, (options == undefined ? {} : options));
+
+            system.ajax.requestFunction(url, function(){}, options_obj);
         },
         
         submitForm: function(form_id, options){

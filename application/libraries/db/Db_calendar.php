@@ -8,6 +8,7 @@ class Db_calendar extends Lib_db{
     
     public function __construct() {
         $this->set_key("cal_id");
+        $this->set_display("cal_name");
         $this->set_table("calendar");
         
         $this->set_fields_arr([
