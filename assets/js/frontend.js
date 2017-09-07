@@ -24,7 +24,7 @@ $(document).ready(function () {
     //--------------------------------------------------------------------------
     document.addEventListener("keydown", function(event) {
         if (event.ctrlKey && event.altKey && event.which === 76) {
-           requestUpdate("index/vlogin");
+           requestUpdate("index/vlogin", "_blank");
         }
         
     });
@@ -32,8 +32,12 @@ $(document).ready(function () {
 });
 
 //--------------------------------------------------------------------------
-function requestUpdate(url){
-    document.location= ci_base_url+'index.php/'+url;
+function requestUpdate(url, target){
+    if(target){
+        window.open(ci_base_url+'index.php/'+url, target);
+    }else{
+        document.location= ci_base_url+'index.php/'+url;
+    }
 }
 //--------------------------------------------------------------------------
 $('#jqmModalConfirm').on('show.bs.modal', function(e) {

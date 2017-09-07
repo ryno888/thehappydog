@@ -1037,7 +1037,7 @@ if ( ! function_exists('function_usable'))
             $ci = &get_instance();
             $uri_arr = $ci->uri->rsegment_array();
             if(array_key_exists(3, $uri_arr)){
-                return $uri_arr[3];
+                return is_numeric($uri_arr[3]) ? $uri_arr[3] : false;
             }
             return $default;
         }

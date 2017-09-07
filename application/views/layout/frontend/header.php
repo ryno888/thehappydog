@@ -48,7 +48,7 @@ $base_url = CI_BASE_URL;
                         <li class="hidden"><a href="#page-top"></a> </li>
                         <li><a class="page-scroll sectionAbout" href="#about">About Us</a></li>
                         <li><a class="page-scroll sectionServices" href="#services">Services</a></li>
-                        <li><a class="page-scroll sectionGallery" href="#gallery">Gallery</a></li>
+                        <!--<li><a class="page-scroll sectionGallery" href="#gallery">Gallery</a></li>-->
                         <li><a class="page-scroll sectionContact" href="#contact">Contact</a></li>
                     </ul>
                 </div>

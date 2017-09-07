@@ -1,9 +1,20 @@
+<?php
+    $this->load->library("addons/Lib_fancy_box");
+    $fancy_box = new Lib_fancy_box();
+    echo $fancy_box->get_output();
+    
+    $first_file = false;
+    if(count($service_file_arr->obj_arr) > 0){
+        $first_file = reset($service_file_arr->obj_arr);
+    }
+?>
+
 <div class="container margin-top-150 margin-bottom-20">
     <div class="row">
         <div class="col-md-12">
-            <div class="btn-group" role="group">
-                <button onclick="requestUpdate('service/vservice_accommodation')" class="btn btn-default" type="button"><i class="fa fa-chevron-left" aria-hidden="true"></i> Back to Accommodation</button>
-                <button class="btn btn-default" type="button">Go to Website</button>
+            <div class="" role="group">
+                <button onclick="<?php echo "requestUpdate('service/vservice/{$service->obj->ser_ref_service_type}')"; ?>" class="btn btn-default" type="button"><i class="fa fa-chevron-left" aria-hidden="true"></i> Back to Accommodation</button>
+                <button class="btn btn-default" onclick="window.open('<?php echo $service->obj->ser_website; ?>', '_blank');" type="button">Go to Website</button>
             </div>
         </div>
     </div>
@@ -12,51 +23,79 @@
     <div class="row product">
         <div class="col-md-5 col-md-offset-0">
             <div class="row">
-                <div class="col-md-12"><img src="assets/img/suit_jacket.jpg" width="100%" height="250px"></div>
+                <?php
+                    if($first_file){
+                        $sef_ref_file_thumb_lg = Http_helper::build_url("index/xstream/fil_id/{$first_file->sef_ref_file_thumb_lg}");
+                        echo "<div class='col-md-12'>
+                            <a href='$sef_ref_file_thumb_lg' class='fancy-box-image' data-fancybox='images' data-width='900' data-height='500'>
+                                <img class='fancy-box-thumb' src='$sef_ref_file_thumb_lg' width='100%' height='250px'>
+                            </a>
+                        </div>";
+                    }
+                ?>
+                
             </div>
             <div class="row">
-                <div class="col-md-12"><img src="assets/img/suit_jacket.jpg" width="70" height="70"><img src="assets/img/suit_jacket.jpg" width="70" height="70"><img src="assets/img/suit_jacket.jpg" width="70" height="70"><img src="assets/img/suit_jacket.jpg" width="70"
-                    height="70"><img src="assets/img/suit_jacket.jpg" width="70" height="70"><img src="assets/img/suit_jacket.jpg" width="70" height="70"></div>
+                <div class="col-md-12 padding-top-10">
+                    <?php
+                        foreach ($service_file_arr->obj_arr as $tiny_service_file) {
+                            if($first_file->id != $tiny_service_file->id){
+                                $tiny_ref_file_thumb_lg = Http_helper::build_url("index/xstream/fil_id/{$tiny_service_file->sef_ref_file_thumb_lg}");
+                                $tiny_ref_file_thumb_tiny = Http_helper::build_url("index/xstream/fil_id/{$tiny_service_file->sef_ref_file_thumb_tiny}");
+                                echo "<a href='$tiny_ref_file_thumb_lg' class='fancy-box-image' data-fancybox='images' data-width='900' data-height='500'>
+                                    <img class='fancy-box-thumb' src='$tiny_ref_file_thumb_tiny' />
+                                </a>";
+                            }
+                        }
+                    ?>
+                </div>
             </div>
         </div>
         <div class="col-md-7">
-            <h2>THE MARINE HERMANUS </h2>
-            <p class="product-details">Marine Drive, 7200 Hermanus, South Africa&nbsp;– <strong>Excellent location - show map</strong> </p>
+            <h2><?php echo $service->obj->ser_title; ?></h2>
+            <p class="product-details"><?php echo $service->obj->ser_location; ?> </p>
             <div class="row">
                 <div class="col-sm-12 social-icons">
-                    <a href="#"><i class="fa fa-facebook-square fa-3x" aria-hidden="true"></i></a>
-                    <a href="#"><i class="fa fa-twitter-square fa-3x" aria-hidden="true"></i></a>
-                    <a href="#"><i class="fa fa-google-plus-square fa-3x" aria-hidden="true"></i></a>
+                    <?php 
+                    
+                        if(!$service->is_empty("ser_facebook_link")){
+                            echo "<a href='{$service->obj->ser_facebook_link}'><i class='fa fa-facebook-square fa-3x' aria-hidden='true'></i></a>";
+                        }
+                        if(!$service->is_empty("ser_twitter_link")){
+                            echo "<a href='{$service->obj->ser_twitter_link}'><i class='fa fa-twitter-square fa-3x' aria-hidden='true'></i></a>";
+                        }
+                        if(!$service->is_empty("ser_google_link")){
+                            echo "<a href='{$service->obj->ser_google_link}'><i class='fa fa-google-plus-square fa-3x' aria-hidden='true'></i></a>";
+                        }
+                    
+                    ?>
                 </div>
             </div>
         </div>
     </div>
     <div class="page-header">
-        <h3>Product Details</h3></div>
-    <p>Perched on top of the cliffs overlooking Hermanus’s Walker Bay, The Marine offers first-class splendour and elegance and a spectacular seascape, with imposing views extending across Western Capes Walker Bay and beyond.The rooms and suites are
-        individually and stylishly decorated and have magnificent views of the sea, the mountains or The Marine's beautiful internal courtyard and finely manicured gardens.Stroll along the cliff path overlooking Hermanus Bay or have a dip in the tidal
-        pool right in front of the hotel. Enjoy exquisite dining or sip a glass of local wine in the lounge, where there is nothing but 3,0 km of ocean between you and the South Pole.During whale season, from June until November, Hermanus offers some
-        of the best land-based whale watching in the world and at The Marine you don't even have to get out of bed to experience it.&nbsp;This is our guests' favourite part of Hermanus, according to independent reviews.This property also has one of
-        the best-rated locations in Hermanus! Guests are happier about it compared to other properties in the area.Couples particularly like the location — they rated it 10 for a two-person trip.We speak your language!The Marine Hermanus has been
-        welcoming Booking.com guests since 15 Jan 2010. </p>
+        <h3>Service Details</h3></div>
+    <p><?php echo $service->obj->ser_details; ?></p>
     <div class="page-header">
-        <h3>Reviews<button class="btn btn-primary write-review" type="button">Write a review</button></h3></div>
-    <div class="media">
-        <div class="media-body">
-            <h4 class="media-heading">Love this!</h4>
-            <div><span class="fa fa-star"></span><span class="fa fa-star"></span><span class="fa fa-star"></span><span class="fa fa-star"></span><span class="fa fa-star-half"></span></div>
-            <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Duis maximus nisl ac diam feugiat, non vestibulum libero posuere. Vivamus pharetra leo non nulla egestas, nec malesuada orci finibus. </p>
-            <p><span class="reviewer-name"><strong>John Doe</strong></span><span class="review-date">7 Oct 2015</span></p>
-        </div>
-    </div>
-    <div class="media">
-        <div class="media-body">
-            <h4 class="media-heading">Fantastic product</h4>
-            <div><span class="fa fa-star"></span><span class="fa fa-star"></span><span class="fa fa-star"></span><span class="fa fa-star"></span><span class="fa fa-star"></span></div>
-            <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Duis maximus nisl ac diam feugiat, non vestibulum libero posuere. Vivamus pharetra leo non nulla egestas, nec malesuada orci finibus. </p>
-            <p><span class="reviewer-name"><strong>Jane Doe</strong></span><span class="review-date">7 Oct 2015</span></p>
-        </div>
-    </div>
+    <?php
+        if($service_review_arr && property_exists($service_review_arr, "obj_arr")){
+            echo "<h3>Reviews</h3></div>";
+            foreach ($service_review_arr->obj_arr as $service_review) {
+                $rating = Lib_html_tags::get_static_rating_html($service_review->srr_rating);
+                $date_created = Lib_date::strtodate($service_review->srr_date_created, Lib_date::$DATE_FORMAT_11);
+                echo "
+                    <div class='media'>
+                        <div class='media-body'>
+                            <h4 class='media-heading'>$service_review->srr_title<p>$date_created</p></h4>
+                            <div>$rating</div>
+                            <p style='margin: 0;'>$service_review->srr_body</p>
+                        </div>
+                    </div>
+                ";
+            }
+        }
+        
+    ?>
 </div>
 
 <script>

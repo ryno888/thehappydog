@@ -6,11 +6,16 @@ class Service extends CI_Controller {
     public function vservice() {
         $key = request_key();
         $data["title"] = Lib_db::get_enum_value("service", "ser_type", $key);
+        $data["service_arr"] = Lib_db::load_db("service", "ser_ref_service_type = $key", ["multiple" => true]);
         $this->load_view('service/vservice', "frontend", $data);
     }
     //--------------------------------------------------------------------------
     public function vservice_details() {
-        $this->load_view('service/vservice_details', "frontend");
+        $key = request_key();
+        $data["service"] = request_db("service", true);
+        $data["service_file_arr"] = Lib_db::load_db("service_file", "sef_ref_service = $key", ["multiple" => true]);
+        $data["service_review_arr"] = Lib_db::load_db("service_review", "srr_ref_service = $key", ["multiple" => true]);
+        $this->load_view('service/vservice_details', "frontend", $data);
     }
     //--------------------------------------------------------------------------
     public function vservice_accommodation() {

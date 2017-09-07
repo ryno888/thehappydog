@@ -18,7 +18,7 @@
         <div class="panel panel-info" >
             <div class="panel-heading">
                 <div class="panel-title">Sign In</div>
-                <div class="login-forgot-password"><a href="#">Forgot password?</a></div>
+                <!--<div class="login-forgot-password"><a href="#">Forgot password?</a></div>-->
             </div>     
             <div class="panel-body login-panel-body" >
                 <div style="display:none" id="login-alert" class="alert alert-danger col-sm-12"></div>
@@ -31,27 +31,27 @@
                         <span class="input-group-addon"><i class="glyphicon glyphicon-lock"></i></span>
                         <input type="password" class="form-control" id="per_password" name="per_password" placeholder="password">
                     </div>
-                    <div class="input-group">
+<!--                    <div class="input-group">
                         <div class="checkbox">
                             <label>
                                 <input id="login-remember" type="checkbox" name="remember" value="1"> Remember me
                             </label>
                         </div>
-                    </div>
+                    </div>-->
                     <div style="margin-top:10px" class="form-group">
                         <div class="col-sm-12 controls">
                             <a id="btn-login" href="#" class="btn btn-default btn-sm loginSubmit" formTarget='loginform'>Login  </a>
-                            <a id="btn-fblogin" href="#" class="btn btn-primary btn-sm">Login with Facebook</a>
+                            <!--<a id="btn-fblogin" href="#" class="btn btn-primary btn-sm">Login with Facebook</a>-->
                         </div>
                     </div>
-                    <div class="form-group">
+<!--                    <div class="form-group">
                         <div class="col-md-12 control">
                             <div class="login-footer-wrapper" >
                                 Don't have an account! 
                                 <a href="#" class="login-signup-link">Sign Up Here</a>
                             </div>
                         </div>
-                    </div>    
+                    </div>    -->
                 </form>     
             </div>                     
         </div>  

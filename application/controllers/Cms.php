@@ -8,15 +8,33 @@ class Cms extends CI_Controller {
         $this->load_view('cms/vlist_service', "system", $data);
     }
     //--------------------------------------------------------------------------
+    public function vlist_service_type() {
+        $this->load_view('cms/vlist_service_type', "system");
+    }
+    //--------------------------------------------------------------------------
     public function vlist_service_images() {
         $data['service'] = $this->request_db("service");
         $this->load_view('cms/vlist_service_images', "system", $data);
     }
     //--------------------------------------------------------------------------
+    public function vlist_service_reviews() {
+        $data['service'] = $this->request_db("service");
+        $this->load_view('cms/vlist_service_reviews', "system", $data);
+    }
+    //--------------------------------------------------------------------------
     public function vadd_service() {
+        $data['service_type'] = $this->request_db("service_type");
         $data['service'] = Lib_db::load_db_default("service");
+        $data['service']->obj->ser_ref_service_type = $data['service_type']->id;
         
         $this->load_view('cms/vadd_service', "system", $data);
+    }
+    //--------------------------------------------------------------------------
+    public function vadd_service_review() {
+        $data['service'] = $this->request_db("service");
+        $data['service_review'] = Lib_db::load_db_default("service_review");
+        
+        $this->load_view('cms/vadd_service_review', "system", $data);
     }
     //--------------------------------------------------------------------------
     public function vadd_service_type() {
@@ -40,10 +58,28 @@ class Cms extends CI_Controller {
     }
     //--------------------------------------------------------------------------
     public function vedit_service() {
-        $data['service'] = $this->request_db("service");
+        $data['service'] = $this->request_db("service", "ser_id");
         $data['file_list'] = $this->load->view('cms/vlist_service_images', $data, true);
+        $data['file_list_reviews'] = $this->load->view('cms/vlist_service_reviews', $data, true);
         
         $this->load_view('cms/vedit_service', "system", $data);
+    }
+    //--------------------------------------------------------------------------
+    public function xedit_config() {
+        $enabled_services_arr = request("enabled_services");
+        $config = $this->request_obj("config", true);
+        $config->update();
+        
+        $sql_where = $enabled_services_arr && count($enabled_services_arr) > 0 ? "srv_id NOT IN (".implode(",", $enabled_services_arr).") AND srv_is_active = 1" : "srv_is_active = 1";
+        
+        $service_type_arr = Lib_database::selectlist("SELECT srv_id, srv_name FROM service_type WHERE $sql_where", "srv_id", "srv_name");
+        foreach ($service_type_arr as $srv_id => $srv_name) {
+            $service_type = Lib_db::load_db("service_type", "srv_id = $srv_id");
+            $service_type->obj->srv_is_active = false;
+            $service_type->update();
+        }
+        
+        return Http_helper::response("Changes successfully saved");
     }
     //--------------------------------------------------------------------------
     public function xadd_service() {
@@ -55,11 +91,9 @@ class Cms extends CI_Controller {
         $this->form_validation->set_rule_db($service, 'ser_details');
         $this->form_validation->set_rule_db($service, 'ser_location_link');
         $this->form_validation->set_rule_db($service, 'ser_location');
-        $this->form_validation->set_rule_db($service, 'ser_type');
         if($this->form_validation->run() == false){
             return Http_helper::error(1, validation_errors());
         }
-        console($service);
         $service->insert();
         
         return Http_helper::response("Changes successfully saved", [
@@ -67,6 +101,26 @@ class Cms extends CI_Controller {
             "action" => [
                 "type" => "redirect",
                 "url" => "cms/vedit_service/ser_id/$service->id",
+            ],
+        ]);
+    }
+    //--------------------------------------------------------------------------
+    public function xadd_review() {
+        
+        $service_review = $this->request_obj("service_review", true);
+        $ser_id = request("ser_id");
+        $this->form_validation->set_rule_db($service_review, 'srr_title');
+        $this->form_validation->set_rule_db($service_review, 'srr_body');
+        if($this->form_validation->run() == false){
+            return Http_helper::error(1, validation_errors());
+        }
+        $service_review->insert();
+        
+        return Http_helper::response("Changes successfully saved", [
+            "code" => 3,
+            "action" => [
+                "type" => "redirect",
+                "url" => "cms/vedit_service/{$service_review->obj->srr_ref_service}",
             ],
         ]);
     }
@@ -80,7 +134,6 @@ class Cms extends CI_Controller {
         $this->form_validation->set_rule_db($service, 'ser_details');
         $this->form_validation->set_rule_db($service, 'ser_location_link');
         $this->form_validation->set_rule_db($service, 'ser_location');
-        $this->form_validation->set_rule_db($service, 'ser_type');
         if($this->form_validation->run() == false){
             return Http_helper::error(1, validation_errors());
         }
@@ -91,10 +144,8 @@ class Cms extends CI_Controller {
         $files_arr = glob($file_dir."/*");
         
         if($files_arr){
-            $this->load->library("addons/Lib_tinypng.php");
             $this->load->helper("File_function");
             $this->load->helper("Image_compression");
-            
             foreach ($files_arr as $path) {
                 if(!is_dir($path)){
                     File_function_helper::mkdir("$file_dir/complete/");
@@ -178,6 +229,11 @@ class Cms extends CI_Controller {
         $this->load->helper("File_function");
         $service_file = $this->request_db("service_file", true);
         $service_file->delete();
+    }
+    //--------------------------------------------------------------------------
+    public function xdelete_service_rating() {
+        $service_review = $this->request_db("service_review", true);
+        $service_review->delete();
     }
     //--------------------------------------------------------------------------
     public function xedit_service_type() {

@@ -26,6 +26,23 @@ class Http_helper {
         }
         return base_url($path);
     }
+    //--------------------------------------------------------------------------------
+    /**
+     * formats a link into and adds http:// prefix
+     * @param type $string
+     * @return type
+     */
+    public static function format_link($string) {
+        if($string == "")return false;
+        if(strpos($string, "https://") !== false){
+            return $string;
+        }
+        $string = str_replace("https://", "", $string);
+        if(strpos($string, "http://") === false){
+           $string = "http://".$string;
+        }
+        return $string;
+    }
     //--------------------------------------------------------------------------
     public static function redirect($path = false, $method = "location") {
         redirect(self::build_url($path), $method);

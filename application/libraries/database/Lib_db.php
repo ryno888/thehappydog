@@ -124,6 +124,7 @@ class Lib_db{
         $options_arr = array_merge([
             "multiple" => false,
             "customsql" => false,
+            "return_default" => false,
         ], $options);
         
         $this->set_new();
@@ -147,7 +148,7 @@ class Lib_db{
             $this->id = $this->obj->{$this->key};
             return $this->obj;
         }else{
-            return false;
+            return $options_arr["multiple"] ? [] : $options_arr["return_default"];
         }
     }
     //--------------------------------------------------------------------------
@@ -168,6 +169,9 @@ class Lib_db{
     //--------------------------------------------------------------------------
     public function insert() {
         $database = new Lib_database();
+        if(property_exists($this->obj, $this->key)){
+            unset($this->obj->{$this->key});
+        }
         $this->id = $this->obj->{$this->key} = $database->insert($this->table, $this->obj);
     }
     //--------------------------------------------------------------------------
@@ -187,7 +191,7 @@ class Lib_db{
     public function clean_obj() {
         $clean_object = clone($this->obj);
         foreach ($clean_object as $key => $value) {
-            if($value == $this->get_field_default($key)){
+            if($value === $this->get_field_default($key)){
                 unset($clean_object->{$key});
             }else{
                 switch ($this->get_field_type($key)) {

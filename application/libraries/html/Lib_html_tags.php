@@ -214,8 +214,8 @@ class Lib_html_tags extends Lib_core{
         if(isset($options_arr["label"]) && $options_arr["label"]){ $label = $options_arr["label"]; }
         
         $data_arr = array_merge([
-                'name'          => $id,
-                'id'            => "{$id}[]",
+                'name'          => "{$id}[]",
+                'id'            => $id,
                 'value'         => false,
                 'checked'       => false,
                 'style'         => '',
@@ -256,11 +256,14 @@ class Lib_html_tags extends Lib_core{
     //--------------------------------------------------------------------------
     public static function itext($label, $id, $value = false, $options = []) {
         $options_arr = array_merge([
-            'append'       => false,
-            'prepend'       => false,
-            'required'       => false,
-            'label'       => false,
-            'attr_arr'       => [],
+            'append' => false,
+            'prepend' => false,
+            'required' => false,
+            'disabled' => false,
+            'type' => 'text',
+            'length' => false,
+            'label' => false,
+            'attr_arr' => [],
         ], $options);
         
         if($options_arr["label"]){ $label = $options_arr["label"]; }
@@ -272,9 +275,17 @@ class Lib_html_tags extends Lib_core{
             'maxlength'     => false,
             'size'          => false,
             'style'         => false,
+            'type'          => $options_arr['type'],
             'class'         => "form-control input-sm ",
             'js'            => "",
         ], $options_arr['attr_arr']);
+        
+        if($options_arr["disabled"]){
+            $data_arr["disabled"] = true;
+        }
+        if($options_arr["length"]){
+            $data_arr["maxlength"] = $options_arr["length"];
+        }
         
         $html_options = Lib_html_tags::get_html_options($options);
         $data_arr['class'] = "{$data_arr['class']} {$html_options['css']}";
@@ -308,6 +319,13 @@ class Lib_html_tags extends Lib_core{
         $data_arr['style'] = "{$data_arr['style']} {$html_options['style']}";
         
         return self::wrap_form_group($label.$html_options['span'], $id, form_textarea($data_arr, '', $data_arr['js']), $options_arr);
+    }
+    //--------------------------------------------------------------------------
+    public static function ihidden($id, $value = false, $options = []) {
+        $options_arr = array_merge([
+        ], $options);
+        
+        return form_hidden($id, $value);
     }
     //--------------------------------------------------------------------------
     public static function ipassword($label, $id, $value = false, $options = []) {
@@ -375,21 +393,26 @@ class Lib_html_tags extends Lib_core{
     //--------------------------------------------------------------------------
     public static function iselect($label, $id, $value_arr = [], $value = false, $options = []) {
         $options_arr = array_merge([
-            'append'       => false,
+            'append'        => false,
             'prepend'       => false,
+            'disabled'      => false,
             '!change'       => false,
             'style'         => false,
             'class'         => false,
-            'attr_arr'       => [],
+            'attr_arr'      => [],
         ], $options);
         
         $data_arr = array_merge([
-            'name'          => $id,
-            'id'       => $id,
+            'name' => $id,
+            'id' => $id,
             'onChange' => $options_arr["!change"],
             'class' => 'form-control input-sm',
-            'style'         => false,
+            'style' => false,
         ], $options_arr["attr_arr"]);
+        
+        if($options_arr["disabled"]){
+            $data_arr["disabled"] = true;
+        }
         
         $html_options = Lib_html_tags::get_html_options($options);
         $data_arr['class'] = "{$data_arr['class']} {$html_options['css']}";
@@ -428,6 +451,11 @@ class Lib_html_tags extends Lib_core{
         ], $options);
         
         return Lib_html_tags::idatetime($id, $label, $value, $options_arr);
+    }
+    //--------------------------------------------------------------------------
+    public static function a($href, $label = false , $options = []){
+        
+        return anchor($href, $label, $options);
     }
 //    //--------------------------------------------------------------------------
 //    public static function idate_picker($id, $label = false , $value = false, $options = []){
@@ -529,15 +557,27 @@ class Lib_html_tags extends Lib_core{
         return form_fieldset_close();
     }
     //--------------------------------------------------------------------------
-    public static function iconbutton($label, $onclick = "javascript:;", $icon = false, $options = []) {
+    public static function iconbutton($label, $icon = false, $onclick = false, $options = []) {
         $options_arr = array_merge([
         ], $options);
         
         $html_options = Lib_html_tags::get_html_options($options);
         $class = "{$html_options['css']}";
         $style = "{$html_options['style']}";
-        $onclick = str_replace("'", '"', $onclick);
+        if(!$onclick){
+            $onclick = "javascript:;";
+        }
         return "<i onclick='$onclick' class='fa $icon fa-icon-btn $class' title='$label' style='$style' aria-hidden='true'></i>";
+    }
+    //--------------------------------------------------------------------------
+    public static function icon($label, $icon = false, $options = []) {
+        $options_arr = array_merge([
+        ], $options);
+        
+        $html_options = Lib_html_tags::get_html_options($options);
+        $class = "{$html_options['css']}";
+        $style = "{$html_options['style']}";
+        return "<i class='fa $icon $class' title='$label' style='$style'></i>";
     }
     //--------------------------------------------------------------------------
     public static function ifile($label, $id, $value = false, $options = []) {
@@ -758,6 +798,145 @@ class Lib_html_tags extends Lib_core{
             }
         }
         
+    }
+    //--------------------------------------------------------------------------------
+    public static function get_rating_html($id, $value = 0){
+        $buffer = "";
+        $rating = $value > 0 ? $value : "void 0";
+        $buffer .= "
+            <script>
+            var __slice = [].slice;
+
+            (function($, window) {
+                    var Starrr;
+                    Starrr = (function() {
+                        Starrr.prototype.defaults = {
+                            rating: $rating,
+                            numStars: 5,
+                            change: function(e, value) {}
+                        };
+                        function Starrr(\$el, options) {
+                            var i, _, _ref,
+                                _this = this;
+                            this.options = $.extend({}, this.defaults, options);
+                            this.\$el = \$el;
+                            _ref = this.defaults;
+                            for (i in _ref) {
+                                _ = _ref[i];
+                                if (this.\$el.data(i) != null) {
+                                    this.options[i] = this.\$el.data(i);
+                                }
+                            }
+                            this.createStars();
+                            this.syncRating();
+                            this.\$el.on('mouseover.starrr', 'span', function(e) {
+                                return _this.syncRating(_this.\$el.find('span').index(e.currentTarget) + 1);
+                            });
+                            this.\$el.on('mouseout.starrr', function() {
+                                return _this.syncRating();
+                            });
+                            this.\$el.on('click.starrr', 'span', function(e) {
+                                return _this.setRating(_this.\$el.find('span').index(e.currentTarget) + 1);
+                            });
+                            this.\$el.on('starrr:change', this.options.change);
+                        }
+
+                        Starrr.prototype.createStars = function() {
+                            var _i, _ref, _results;
+
+                            _results = [];
+                            for (_i = 1, _ref = this.options.numStars; 1 <= _ref ? _i <= _ref : _i >= _ref; 1 <= _ref ? _i++ : _i--) {
+                                _results.push(this.\$el.append(\"<span class='glyphicon .glyphicon-star-empty'></span>\"));
+                                    }
+                                    return _results;
+                                };
+
+                                Starrr.prototype.setRating = function(rating) {
+                                    if (this.options.rating === rating) {
+                                        rating = void 0;
+                                    }
+                                    this.options.rating = rating;
+                                    this.syncRating();
+                                    return this.\$el.trigger('starrr:change', rating);
+                                };
+
+                                Starrr.prototype.syncRating = function(rating) {
+                                    var i, _i, _j, _ref;
+
+                                    rating || (rating = this.options.rating);
+                                    if (rating) {
+                                        for (i = _i = 0, _ref = rating - 1; 0 <= _ref ? _i <= _ref : _i >= _ref; i = 0 <= _ref ? ++_i : --_i) {
+                                            this.\$el.find('span').eq(i).removeClass('glyphicon-star-empty').addClass('glyphicon-star');
+                                        }
+                                    }
+                                    if (rating && rating < 5) {
+                                        for (i = _j = rating; rating <= 4 ? _j <= 4 : _j >= 4; i = rating <= 4 ? ++_j : --_j) {
+                                            this.\$el.find('span').eq(i).removeClass('glyphicon-star').addClass('glyphicon-star-empty');
+                                        }
+                                    }
+                                    if (!rating) {
+                                        return this.\$el.find('span').removeClass('glyphicon-star').addClass('glyphicon-star-empty');
+                                    }
+                                };
+
+                                return Starrr;
+
+                            })();
+                        return $.fn.extend({
+                            starrr: function() {
+                                var args, option;
+
+                                option = arguments[0], args = 2 <= arguments.length ? __slice.call(arguments, 1) : [];
+                                return this.each(function() {
+                                    var data;
+
+                                    data = $(this).data('star-rating');
+                                    if (!data) {
+                                        $(this).data('star-rating', (data = new Starrr($(this), option)));
+                                    }
+                                    if (typeof option === 'string') {
+                                        return data[option].apply(data, args);
+                                    }
+                                });
+                            }
+                        });
+                    })(window.jQuery, window);
+
+            $(function() {
+                return $('.starrr').starrr();
+            });
+
+            $(document).ready(function() {
+
+                $('#__stars').on('starrr:change', function(e, value) {
+                    $('#$id').val(value);
+                });
+
+                $('#stars-existing').on('starrr:change', function(e, value) {
+                    $('#count-existing').html(value);
+                });
+            });
+            
+            </script>
+        ";
+        
+        $buffer .= "<div id='__stars' class='starrr' style='cursor:pointer; font-size:16px'></div>";
+        $buffer .= Lib_html_tags::ihidden($id, $value);
+        
+        return $buffer;
+    }
+    //--------------------------------------------------------------------------------
+    public static function get_static_rating_html($rating = 0){
+        $return = "";
+        $rating = ceil($rating);
+        for ($index = 1; $index <= 5; $index++) {
+            if($index <= $rating){
+                $return .= "<i style='font-size:14px' class='fa fa-star' aria-hidden='true'></i>";
+            }else{
+                $return .= "<i style='font-size:14px' class='fa fa-star-o' aria-hidden='true'></i>";
+            }
+        }
+        return $return;
     }
     //--------------------------------------------------------------------------
 }
