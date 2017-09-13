@@ -22,7 +22,7 @@ class Error_helper {
         $ci->load->helper('file');
         $result_arr = get_filenames(DIR_LOGS);
         $file_html = "";
-        if(count($result_arr) > 1){
+        if(count($result_arr) > 1 && CI_SHOW_ERRORS == true){
             foreach ($result_arr as $file) {
                 if(strpos($file, "index") === false){
                     $url = CI_BASE_URL."index.php/system/vview_error/file/$file";
