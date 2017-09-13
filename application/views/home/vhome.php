@@ -66,7 +66,7 @@ defined('BASEPATH') OR exit('No direct script access allowed');
         <div class="container-fluid">
             <div class="row">
                 <div class="col-md-2"></div>
-                <div class="col-md-8">
+                <div class="col-md-6 col-md-offset-1">
                     <div class="carousel slide" id="carousel-610744">
                         <ol class="carousel-indicators">
                             <li class="active" data-slide-to="0" data-target="#carousel-610744"></li>

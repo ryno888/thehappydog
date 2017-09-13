@@ -10,7 +10,7 @@ legend {
     border-bottom: 1px solid #e5e5e5;
 }
 
-.sliderImage{ width: 870px; height: 360px; }
+.sliderImage{ width: 100%; height: 360px; }
 .media-body{ 
     background-color: #f1f1f1;
     padding: 15px;
